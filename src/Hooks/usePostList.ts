@@ -5,22 +5,28 @@ type PostResponse = {
   articles: IPost[];
 };
 
+export type FilterParams = {
+  type: 'author' | 'tag';
+  action: string;
+};
+
 export const usePostList = () => {
   const [posts, setPosts] = useState<IPost[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<null>(null);
   const [offset, setOffset] = useState(0);
+  const [filters, setFilters] = useState<FilterParams | null>(null);
 
-  const fetchData = () => {
-    setLoading(true);
-    fetch(`https://api.realworld.io/api/articles?offset=${offset}`)
+  const fetchData = (filters?: FilterParams | null) => {
+    fetch(
+      `https://api.realworld.io/api/articles?${filters?.type}=${filters?.action}&offset=${offset}`
+    )
       .then((res) => res.json())
-      .then((data: PostResponse) =>
-        setPosts((prev) => [...prev, ...data.articles])
-      )
+      .then((data: PostResponse) => {
+        setPosts((prev) => [...prev, ...data.articles]);
+      })
       .catch((e) => setError(e))
       .finally(() => {
-        setOffset((prev) => prev + 10);
         setLoading(false);
       });
   };
@@ -29,14 +35,29 @@ export const usePostList = () => {
     setPosts([]);
     setOffset(0);
     setLoading(true);
+    setFilters(null);
+  };
+
+  const getMoreData = () => {
+    setOffset((prev) => prev + 10);
+
+    setLoading(true);
+    fetchData(filters);
+  };
+
+  const addFilters = (filters: FilterParams) => {
+    setFilters(filters);
+    setPosts([]);
+    setOffset(0);
+    setLoading(true);
   };
 
   useEffect(() => {
     if (loading && offset === 0) {
       setError(null);
-      fetchData();
+      fetchData(filters);
     }
-  }, [loading]);
+  }, [loading, filters]);
 
   return {
     posts,
@@ -44,5 +65,8 @@ export const usePostList = () => {
     error,
     fetchData,
     reload,
+    addFilters,
+    filters,
+    getMoreData,
   };
 };

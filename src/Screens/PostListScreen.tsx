@@ -5,10 +5,11 @@ import { Loader } from '../UI/Loader';
 import { PostCard } from '../Components/PostCard';
 
 export const PostListScreen: React.FC = () => {
-  const { posts, loading, fetchData, reload } = usePostList();
+  const { posts, loading, fetchData, reload, addFilters, getMoreData } =
+    usePostList();
 
   return (
-    <SafeAreaView edges={['bottom']} style={styles.mainContainer}>
+    <SafeAreaView style={styles.mainContainer}>
       {loading && !posts.length ? (
         <View style={styles.loaderContainer}>
           <Loader />
@@ -21,7 +22,7 @@ export const PostListScreen: React.FC = () => {
           contentContainerStyle={styles.listInnerStyle}
           style={styles.listContainer}
           data={posts}
-          onEndReached={fetchData}
+          onEndReached={getMoreData}
           onEndReachedThreshold={0.6}
           keyExtractor={(item, index) => `${index}`}
           ListFooterComponent={() => (loading ? <Loader /> : null)}
@@ -33,6 +34,9 @@ export const PostListScreen: React.FC = () => {
               tagList={item.tagList}
               title={item.title}
               favoritesCount={item.favoritesCount}
+              body={item.body}
+              slug={item.slug}
+              addFilters={addFilters}
             />
           )}
         />
@@ -45,6 +49,7 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     paddingBottom: 10,
+    paddingTop: 20,
   },
   listContainer: {
     flex: 1,

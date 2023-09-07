@@ -1,29 +1,61 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { IPost } from '../Common/Types';
 import { AntDesign } from '@expo/vector-icons';
+import { useCallback } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../Navigation/AppNavigation';
+import { FilterParams, usePostList } from '../Hooks/usePostList';
 
-type IPostProps = Omit<IPost, 'slug' | 'body'>;
+export interface IPostCardProps extends IPost {
+  addFilters: (filters: FilterParams) => void;
+}
 
-export const PostCard: React.FC<IPostProps> = ({
+export const PostCard: React.FC<IPostCardProps> = ({
   tagList,
   title,
   author,
   createdAt,
   description,
   favoritesCount,
+  body,
+  slug,
+  addFilters,
 }) => {
   const cutDescription =
     description.length >= 200 ? `${description.slice(0, 200)}...` : description;
 
-  const date = createdAt.slice(0, 10);
+  const date = createdAt.slice(0, 10).split('-').reverse().join('.');
+
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const goPost = useCallback(() => {
+    navigation.navigate('Post', {
+      title,
+      body,
+      author,
+      createdAt: date,
+      favoritesCount,
+      tagList,
+      slug,
+      description,
+      addFilters,
+    });
+  }, []);
+
   return (
-    <View style={styles.postWrapper}>
+    <TouchableOpacity onPress={goPost} style={styles.postWrapper}>
       <View style={styles.tagLine}>
         {tagList.length &&
           tagList.map((tag) => (
-            <View key={tag} style={styles.tagItem}>
+            <TouchableOpacity
+              onPress={() => addFilters({ type: 'tag', action: tag })}
+              key={tag}
+              style={styles.tagItem}
+            >
               <Text>#{tag}</Text>
-            </View>
+            </TouchableOpacity>
           ))}
       </View>
       <Text numberOfLines={3} style={styles.titleText}>
@@ -32,8 +64,15 @@ export const PostCard: React.FC<IPostProps> = ({
       <Text style={styles.descriptionText}>{cutDescription}</Text>
 
       <View style={styles.authorBlock}>
-        <AntDesign name="user" size={20} color="black" />
-        <Text>{author.username}</Text>
+        <TouchableOpacity
+          style={styles.authorBlock}
+          onPress={() =>
+            addFilters({ type: 'author', action: author.username })
+          }
+        >
+          <AntDesign name="user" size={20} color="black" />
+          <Text>{author.username}</Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.bottomLine}>
         <View style={styles.dateBlock}>
@@ -45,7 +84,7 @@ export const PostCard: React.FC<IPostProps> = ({
           <Text>{favoritesCount}</Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
