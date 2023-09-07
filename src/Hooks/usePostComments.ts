@@ -19,7 +19,6 @@ export const usePostComments = (slug: string) => {
     fetch(`https://api.realworld.io/api/articles/${slug}/comments`)
       .then((res) => res.json())
       .then((data: Response) => {
-        console.log('DATA', data);
         setComments(data.comments);
       })
       .finally(() => {
