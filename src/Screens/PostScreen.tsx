@@ -1,4 +1,3 @@
-import { IPost } from '../Common/Types';
 import { RouteProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../Navigation/AppNavigation';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -13,7 +12,7 @@ import {
 import React from 'react';
 import { usePostComments } from '../Hooks/usePostComments';
 import { AntDesign } from '@expo/vector-icons';
-import { FilterParams, usePostList } from '../Hooks/usePostList';
+import { FilterParams } from '../Hooks/usePostList';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 type PostScreenRouteProp = RouteProp<RootStackParamList, 'Post'>;

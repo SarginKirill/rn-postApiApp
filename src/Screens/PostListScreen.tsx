@@ -1,6 +1,6 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { usePostList } from '../Hooks/usePostList';
-import { FlatList, StyleSheet, Text, View, RefreshControl } from 'react-native';
+import { FlatList, StyleSheet, View, RefreshControl } from 'react-native';
 import { Loader } from '../UI/Loader';
 import { PostCard } from '../Components/PostCard';
 

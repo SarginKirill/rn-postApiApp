@@ -2,7 +2,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { PostListScreen } from '../Screens/PostListScreen';
 import { PostScreen } from '../Screens/PostScreen';
-import { IPost } from '../Common/Types';
 import { IPostCardProps } from '../Components/PostCard';
 
 export type RootStackParamList = {
@@ -19,7 +18,7 @@ export const AppNavigation = () => {
         <Stack.Screen
           name="PostList"
           component={PostListScreen}
-          options={{ title: '', headerShown: false }}
+          options={{ headerShown: false }}
         />
         <Stack.Screen name="Post" component={PostScreen} />
       </Stack.Navigator>

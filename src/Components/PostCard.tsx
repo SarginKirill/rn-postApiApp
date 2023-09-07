@@ -5,7 +5,7 @@ import { useCallback } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../Navigation/AppNavigation';
-import { FilterParams, usePostList } from '../Hooks/usePostList';
+import { FilterParams } from '../Hooks/usePostList';
 
 export interface IPostCardProps extends IPost {
   addFilters: (filters: FilterParams) => void;
