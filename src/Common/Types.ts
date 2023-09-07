@@ -9,7 +9,7 @@ export interface IPost {
   author: IAuthor;
 }
 
-interface IAuthor {
+export interface IAuthor {
   username: string;
   image: string;
 }

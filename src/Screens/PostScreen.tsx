@@ -96,7 +96,16 @@ export const PostScreen: React.FC<Props> = ({ route }) => {
         {comments.length ? (
           comments.map((comment) => (
             <View style={styles.commentContainer}>
-              <Text>{comment}</Text>
+              <View style={styles.commentAuthorContainer}>
+                <Image
+                  style={styles.userAvatar}
+                  source={{ uri: comment.author.image }}
+                />
+                <Text style={styles.commentAuthorName}>
+                  {comment.author.username}
+                </Text>
+              </View>
+              <Text>{comment.body}</Text>
             </View>
           ))
         ) : (
@@ -185,5 +194,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     marginTop: 10,
+  },
+  commentAuthorContainer: {
+    flexDirection: 'row',
+    gap: 10,
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  commentAuthorName: {
+    fontWeight: '600',
   },
 });
